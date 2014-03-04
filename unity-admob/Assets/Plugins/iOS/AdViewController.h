@@ -8,7 +8,7 @@ extern "C" {
     int position;
 }
 
-+ (CGSize) determineAdSize;
++ (GADAdSize) determineAdSize;
 + (void) installAdMob:(NSString *) unitID position:(int)position;
 - (void) addTestDeviceID:(NSString *) testDeviceID;
 - (void) hideAd;

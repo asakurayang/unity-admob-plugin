@@ -14,13 +14,14 @@ extern UIView* UnityGetGLView();
 
 static AdViewController *instance = nil;
 
-+ (CGSize) determineAdSize{
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
-        return GAD_SIZE_320x50;
-	}else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
-        return GAD_SIZE_468x60;
-	}
-    return CGSizeMake(0.0, 0.0);
++ (GADAdSize) determineAdSize{
+    UIInterfaceOrientation  orientation = [UnityGetGLViewController() interfaceOrientation];
+    if(UIInterfaceOrientationIsPortrait(orientation)){
+        return kGADAdSizeSmartBannerPortrait;
+    }
+    else {
+        return kGADAdSizeSmartBannerLandscape;
+    }
 }
 
 + (void) installAdMob:(NSString *)adMobID position:(int)position{
@@ -43,64 +44,23 @@ static AdViewController *instance = nil;
     [rootView addSubview:adViewController.view];
     
     // Init Admob
-    GADBannerView *bannerView = [[GADBannerView alloc] init];
+    GADAdSize adSize = [AdViewController determineAdSize];
+    CGPoint origin = CGPointMake(0, 0);
+    switch (position) {
+    case AdPositionBottom:
+            origin = CGPointMake(0, adViewController.view.frame.size.height - CGSizeFromGADAdSize(adSize).height);
+            break;
+    }
+    GADBannerView *bannerView = [[GADBannerView alloc] initWithAdSize:adSize origin:origin];
     bannerView.adUnitID = adMobID;
     bannerView.rootViewController = rootViewController;
     bannerView.delegate = adViewController;
    
     // Add AdView
     adViewController.bannerView = bannerView;
-    [adViewController layoutAdView];
     [adViewController.view addSubview:bannerView];
     
     NSLog(@"Install AdMob");
-}
-
-- (void)layoutAdView{
-    CGRect rootBounds = self.view.bounds;
-    CGSize adSize = [AdViewController determineAdSize];
-    CGRect frame;
-    int autoresizingMask = 0;
-    
-    frame.size = adSize;
-    
-    // x layout
-    switch (position) {
-        case AdPositionTop:
-        case AdPositionBottom:
-            frame.origin.x = (rootBounds.size.width - adSize.width) / 2;
-            autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-            break;
-        case AdPositionTopLeft:
-        case AdPositionBottomLeft:
-            frame.origin.x = 0;
-            autoresizingMask += UIViewAutoresizingFlexibleRightMargin;
-            break;
-        case AdPositionTopRight:
-        case AdPositionBottomRight:
-            frame.origin.x = 0;
-            autoresizingMask += UIViewAutoresizingFlexibleLeftMargin;
-            break;
-    }
-    
-    // y layout
-    switch (position) {
-        case AdPositionTop:
-        case AdPositionTopLeft:
-        case AdPositionTopRight:
-            frame.origin.y = 0;
-            autoresizingMask += UIViewAutoresizingFlexibleBottomMargin;
-            break;
-        case AdPositionBottom:
-        case AdPositionBottomLeft:
-        case AdPositionBottomRight:
-            frame.origin.y = rootBounds.size.height - adSize.height;
-            autoresizingMask += UIViewAutoresizingFlexibleTopMargin;
-            break;
-    }
-   
-    bannerView.frame = frame;
-    bannerView.autoresizingMask = autoresizingMask;
 }
 
 - (id)init {
