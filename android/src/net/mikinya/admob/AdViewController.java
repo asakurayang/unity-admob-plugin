@@ -1,25 +1,29 @@
 package net.mikinya.admob;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.LinearLayout;
 import android.util.Log;
-import android.view.View;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
+
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.unity3d.player.UnityPlayer;
-import com.google.ads.*;
 
 public class AdViewController implements AdListener{
-	static private int BANNER_REFRESH_RATE = 1000 * 60 * 5;
+//	static private int BANNER_REFRESH_RATE = 1000 * 60 * 5;
 	private Handler handler;
 	private Activity activity;
 	private AdView adView;
-	private Timer timer;
+//	private Timer timer;
 	private ArrayList<String> testDevices;
 	public String adMobID;
 	public int position;
@@ -79,7 +83,7 @@ public class AdViewController implements AdListener{
 			break;
 		}
 		activity.addContentView(layout, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-	    adView = new AdView(activity, AdSize.BANNER, adMobID);
+	    adView = new AdView(activity, AdSize.SMART_BANNER, adMobID);
 	    adView.setAdListener(this);
 	    layout.addView(adView); 
 	}
@@ -121,27 +125,27 @@ public class AdViewController implements AdListener{
     }
 	
 	public void cancelRefreshTimer(){
-		if(timer != null){
-			timer.cancel();
-			timer = null;
-		}
+//		if(timer != null){
+//			timer.cancel();
+//			timer = null;
+//		}
 	}
 	
 	// Admob Event Listener
     public void onDismissScreen(Ad ad){}
     
     public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode error) {
-        if(timer != null) return;
-        
-    	timer = new Timer(true);
-        TimerTask mTask = new TimerTask() {
-            @Override
-            public void run() {
-            	refreshAd();
-            }                    
-        };
-        
-        timer.schedule(mTask, BANNER_REFRESH_RATE);
+//        if(timer != null) return;
+//        
+//    	timer = new Timer(true);
+//        TimerTask mTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//            	refreshAd();
+//            }                    
+//        };
+//        
+//        timer.schedule(mTask, BANNER_REFRESH_RATE);
     }
 	public void onLeaveApplication(Ad ad){}
 	

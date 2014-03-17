@@ -77,10 +77,12 @@ static AdViewController *instance = nil;
 
 - (void) showAd{
     self.bannerView.hidden = NO;
+    self.view.hidden = NO;
 }
 
 - (void) hideAd{
     self.bannerView.hidden = YES;
+    self.view.hidden = YES;
 }
 
 - (void)refreshBanner {
@@ -92,7 +94,7 @@ static AdViewController *instance = nil;
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"%@", error);
-    [NSTimer scheduledTimerWithTimeInterval:BANNER_REFRESH_RATE target:self selector:@selector(refreshBanner) userInfo:nil repeats:NO];
+//    [NSTimer scheduledTimerWithTimeInterval:BANNER_REFRESH_RATE target:self selector:@selector(refreshBanner) userInfo:nil repeats:NO];
 }
 
 - (void)dealloc {
