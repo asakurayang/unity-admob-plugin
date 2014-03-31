@@ -14,7 +14,7 @@ extern "C" {
 - (void) hideAd;
 - (void) showAd;
 - (void) refreshBanner;
-- (void) layoutAdView;
+//- (void) layoutAdView;
 
 @property(nonatomic, strong) GADBannerView *bannerView;
 @property(assign) int position;
